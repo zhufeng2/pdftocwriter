@@ -16,7 +16,7 @@ Extract, edit, and write table of contents bookmarks into PDF files. Supports OC
 
 ### Download Executable (Windows)
 
-Download the latest release from [GitHub Releases](https://github.com/yourusername/pdftocwriter/releases):
+Download the latest release from [GitHub Releases](https://github.com/zhufeng2/pdftocwriter/releases):
 - `PDFTOCWriter.exe` — Standalone executable, no Python installation required
 
 ### From Source
