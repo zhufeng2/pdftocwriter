@@ -1,6 +1,6 @@
 # PDF TOC Writer
 
-[![Release](https://img.shields.io/badge/release-v1.0.0-blue)](https://github.com/yourusername/pdftocwriter/releases/tag/v1.0.0)
+[![Release](https://img.shields.io/badge/release-v1.0.0-blue)](https://github.com/zhufeng2/pdftocwriter/releases/tag/v1.0.0)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 Extract, edit, and write table of contents bookmarks into PDF files. Supports OCR for scanned PDFs.
@@ -24,7 +24,7 @@ Download the latest release from [GitHub Releases](https://github.com/zhufeng2/p
 **Requirements:** Python 3.10+
 
 ```bash
-git clone https://github.com/yourusername/pdftocwriter.git
+git clone https://github.com/zhufeng2/pdftocwriter.git
 cd pdftocwriter
 pip install pypdf requests
 python main.py
