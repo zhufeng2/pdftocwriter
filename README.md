@@ -53,6 +53,8 @@ Chapter 2 Related Work 5
 
 Auto Format detects the heading prefix (`1.1.1`, `Chapter`, `Section`, etc.) and applies indentation automatically.
 
+## Screenshots
+![English Interface](img/en.png)
 
 ## Building from Source
 
@@ -74,7 +76,20 @@ For a single-file executable, modify `PDFTOCWriter.spec` and set `onefile=True` 
 
 ## API Token
 
-The token is stored in `~/.pdftocwriter.json`, outside the project directory and not tracked by git.
+### Getting Your PaddleOCR API Token
+
+The OCR feature requires a PaddleOCR API token. Follow these steps to get one:
+
+1. Visit [PaddleOCR AI Studio](https://aistudio.baidu.com/paddleocr)
+2. Sign up or log in with your Baidu account
+3. Navigate to the API section and create a new API key
+4. Copy your API token
+
+### Using the Token
+
+- Enter your token in the app's **API Token** field
+- The token is stored locally in `~/.pdftocwriter.json` (outside the project directory, not tracked by git)
+- Your token is never uploaded or shared
 
 ## Changelog
 
