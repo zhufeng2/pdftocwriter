@@ -62,6 +62,6 @@ def auto_format(raw_text: str) -> str:
             result.append(line)
             continue
         title, page = m.group(1).strip(), m.group(2)
-        indent = "  " * (detect_toc_level(title) - 1)
+        indent = "    " * (detect_toc_level(title) - 1)
         result.append(f"{indent}{title} {page}")
     return "\n".join(result)

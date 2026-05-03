@@ -33,7 +33,7 @@ def _collect_outlines(outlines, reader, lines: list[str], level: int) -> None:
             try:
                 title = item.title.strip()
                 page_num = reader.get_destination_page_number(item) + 1
-                lines.append(f"{'  ' * level}{title} {page_num}")
+                lines.append(f"{'    ' * level}{title} {page_num}")
             except Exception:
                 pass
 
@@ -87,7 +87,7 @@ def _parse_toc_text(
         if not line.strip():
             continue
         stripped = line.lstrip(" ")
-        level = (len(line) - len(stripped)) // 2
+        level = (len(line) - len(stripped)) // 4
         m = re.match(r"^(.*?)\s+(\d+)\s*$", stripped)
         if not m:
             continue

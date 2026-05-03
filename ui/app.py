@@ -204,13 +204,15 @@ class App(tk.Tk):
             ("Clear",        self._clear_editor),
             ("Auto Format",  self._auto_format),
         ]:
-            tk.Button(
+            btn = tk.Label(
                 row, text=label,
                 font=("Segoe UI", 9), bg=CLR_BORDER2, fg="#333",
-                activebackground="#d0d0d0", relief=tk.FLAT,
                 cursor="hand2", padx=10, pady=4,
-                command=cmd,
-            ).pack(side=tk.RIGHT, padx=(4, 0))
+            )
+            btn.pack(side=tk.RIGHT, padx=(4, 0))
+            btn.bind("<Button-1>", lambda _, c=cmd: c())
+            btn.bind("<Enter>", lambda _, b=btn: b.config(bg="#d0d0d0"))
+            btn.bind("<Leave>", lambda _, b=btn: b.config(bg=CLR_BORDER2))
 
     def _build_editor(self, parent: tk.Frame) -> None:
         frame = tk.Frame(
@@ -242,13 +244,15 @@ class App(tk.Tk):
             highlightbackground="#ccc", highlightthickness=1,
         ).pack(side=tk.LEFT, ipady=4, padx=(0, 16))
 
-        tk.Button(
+        write_btn = tk.Label(
             bar, text="Write TOC to PDF",
             font=("Segoe UI", 10, "bold"), bg=CLR_ACCENT, fg="white",
-            activebackground=CLR_ACCENT2, activeforeground="white",
-            relief=tk.FLAT, cursor="hand2", padx=20, pady=7,
-            command=self._write_toc,
-        ).pack(side=tk.RIGHT)
+            cursor="hand2", padx=20, pady=7,
+        )
+        write_btn.pack(side=tk.RIGHT)
+        write_btn.bind("<Button-1>", lambda _: self._write_toc())
+        write_btn.bind("<Enter>", lambda _: write_btn.config(bg=CLR_ACCENT2))
+        write_btn.bind("<Leave>", lambda _: write_btn.config(bg=CLR_ACCENT))
 
     # ── Event handlers ─────────────────────────────────────────────────────────
 
@@ -279,7 +283,8 @@ class App(tk.Tk):
         if not self.pdf_path:
             self.status_var.set("Please upload a PDF first.")
             return
-        self.ocr_btn.config(state=tk.DISABLED, text="Running...")
+        self.ocr_btn.config(text="Running...", bg="#aaa", cursor="")
+        self.ocr_btn.unbind("<Button-1>")
         self.ocr_status.config(text="OCR status: Running...")
         threading.Thread(target=self._run_ocr, daemon=True).start()
 
@@ -288,7 +293,7 @@ class App(tk.Tk):
         if not token:
             self.after(0, messagebox.showerror, "Error", "Please enter an API token.")
             self.after(0, self.ocr_status.config, {"text": "OCR status: No token"})
-            self.after(0, self.ocr_btn.config, {"state": tk.NORMAL, "text": "Start OCR"})
+            self.after(0, self._reset_ocr_btn)
             return
         try:
             text = extract_toc_via_ocr(self.pdf_path, token, progress_cb=self._set_status)
@@ -299,7 +304,11 @@ class App(tk.Tk):
             self.after(0, self.ocr_status.config, {"text": "OCR status: Error"})
             self._set_status(f"OCR error — {e}")
         finally:
-            self.after(0, self.ocr_btn.config, {"state": tk.NORMAL, "text": "Start OCR"})
+            self.after(0, self._reset_ocr_btn)
+
+    def _reset_ocr_btn(self) -> None:
+        self.ocr_btn.config(text="Start OCR", bg=CLR_ACCENT, cursor="hand2")
+        self.ocr_btn.bind("<Button-1>", lambda _: self._start_ocr())
 
     def _write_toc(self) -> None:
         text = self.editor.get("1.0", tk.END).strip()
@@ -355,13 +364,14 @@ def _section_label(parent: tk.Widget, text: str) -> None:
     ).pack(anchor="w", padx=14, pady=(12, 4))
 
 
-def _blue_button(parent: tk.Widget, text: str, command) -> tk.Button:
-    btn = tk.Button(
+def _blue_button(parent: tk.Widget, text: str, command) -> tk.Label:
+    btn = tk.Label(
         parent, text=text,
         font=("Segoe UI", 10), bg=CLR_ACCENT, fg="white",
-        activebackground=CLR_ACCENT2, activeforeground="white",
-        relief=tk.FLAT, cursor="hand2", pady=6,
-        command=command,
+        cursor="hand2", pady=6,
     )
     btn.pack(fill=tk.X, padx=14)
+    btn.bind("<Button-1>", lambda _: command())
+    btn.bind("<Enter>", lambda _: btn.config(bg=CLR_ACCENT2))
+    btn.bind("<Leave>", lambda _: btn.config(bg=CLR_ACCENT))
     return btn
