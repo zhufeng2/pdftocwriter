@@ -6,10 +6,15 @@ Extract, edit, and write table of contents bookmarks into PDF files. Supports OC
 
 ## Features
 
+- **Single-file workflow** — open the whole book once; locate, recognize and write without re-cropping or re-selecting the file
+- **Built-in PDF preview** (PySide6 / QtPdf) — thumbnail navigation + page view; mark the TOC page range visually
+- **Auto-detect TOC pages** and **auto page-offset** ("set current page as body page 1")
 - Auto-load existing PDF bookmarks into the editor
-- Edit TOC text with auto-formatting by hierarchy level
-- OCR support via PaddleOCR API for scanned PDFs
-- Write the edited TOC as bookmarks into a copy of the target PDF
+- TOC editor with level-aware highlighting, monospace font and **real-time validation** (out-of-range / unparsable lines are flagged)
+- Auto-format the TOC by hierarchy level; import / export TOC as text
+- OCR via PaddleOCR API — only the selected TOC pages are sent
+- Light / dark theme, remembers window size
+- Write the edited TOC as bookmarks into a `*_toc.pdf` copy
 
 ## Quick Start
 
@@ -20,33 +25,33 @@ Download the latest release from [GitHub Releases](https://github.com/zhufeng2/p
 
 ### From Source
 
-**Requirements:** Python 3.10+
+**Requirements:** Python 3.10–3.14
 
 ```bash
 git clone https://github.com/zhufeng2/pdftocwriter.git
 cd pdftocwriter
-pip install pypdf requests
+pip install -r requirements.txt
 python main.py
 ```
 
 ## Usage
 
-1. Click **Upload PDF** — upload the cropped table of contents PDF (not the full book PDF)
-   - Existing bookmarks are loaded automatically if available
-2. If no bookmarks, enter your API token and click **Start OCR** to extract TOC from the image
-3. Edit the TOC in the editor, then click **Auto Format** to indent by level
-4. Set **Page offset** if the PDF page numbers differ from the book's page numbers
-5. Click **Write TOC to PDF**, select the **full book PDF** — a `*_toc.pdf` copy is created with the TOC bookmarks
+1. Click **打开 PDF** (Open PDF) — or drag a PDF onto the window. Open the **whole book**; existing bookmarks load automatically.
+2. In the center preview, page through to find the contents pages. Click **自动检测目录页** (auto-detect), or use **当前页 → 起始 / 结束** to mark the range from the page you are viewing.
+3. Enter your API token and click **识别选定页** (Recognize) — only the selected TOC pages are sent to OCR.
+4. Edit the TOC on the right (use **自动格式化** to indent by level). Lines with bad page numbers are highlighted in red.
+5. Turn to the book's first body page and click **用当前页为正文首页** to compute the page offset automatically.
+6. Click **写入书签到 PDF** (Write) — a `*_toc.pdf` copy is created next to the original, no second file picker.
 
 ## TOC Format
 
-Each line follows `Title PageNumber`. Two-space indentation marks a sub-level:
+Each line follows `Title PageNumber`. Six-space indentation marks a sub-level:
 
 ```
 Chapter 1 Introduction 1
-  1.1 Background 1
-  1.2 Purpose 2
-    1.2.1 Scope 3
+      1.1 Background 1
+      1.2 Purpose 2
+            1.2.1 Scope 3
 Chapter 2 Related Work 5
 ```
 
@@ -60,7 +65,7 @@ Auto Format detects the heading prefix (`1.1.1`, `Chapter`, `Section`, etc.) and
 ### Prerequisites
 
 ```bash
-pip install pyinstaller pypdf requests
+pip install pyinstaller -r requirements.txt
 ```
 
 ### Build Executable

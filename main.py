@@ -1,4 +1,4 @@
-from ui.app import App
+from ui.qt_app import run
 
 if __name__ == "__main__":
-    App().mainloop()
+    run()

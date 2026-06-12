@@ -1,5 +1,7 @@
 import re
 
+from core.bookmarks import INDENT, TOC_LINE_RE
+
 
 def detect_toc_level(title: str) -> int:
     """
@@ -57,11 +59,11 @@ def auto_format(raw_text: str) -> str:
         if not line:
             result.append("")
             continue
-        m = re.match(r"^(.*?)\s+(\d+)\s*$", line)
+        m = TOC_LINE_RE.match(line)
         if not m:
             result.append(line)
             continue
         title, page = m.group(1).strip(), m.group(2)
-        indent = "    " * (detect_toc_level(title) - 1)
+        indent = INDENT * (detect_toc_level(title) - 1)
         result.append(f"{indent}{title} {page}")
     return "\n".join(result)
