@@ -539,7 +539,7 @@ class MainWindow(QWidget):
     def _apply_theme(self) -> None:
         self._palette = Palette(self._dark)
         app = QApplication.instance()
-        if app is not None:
+        if isinstance(app,QApplication):
             app.setStyleSheet(build_qss(self._palette))
         self.preview.set_canvas_color(self._palette.canvas)
         self.editor.set_theme(self._palette)

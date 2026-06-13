@@ -1,31 +1,20 @@
-# PDF TOC Writer
+# PDF 目录书签工具
 
 [![Release](https://img.shields.io/badge/release-v1.0.0-blue)](https://github.com/zhufeng2/pdftocwriter/releases/tag/v1.0.0)
 
-Extract, edit, and write table of contents bookmarks into PDF files. Supports OCR for scanned PDFs.
+提取、编辑并写入 PDF 文件的目录书签，支持对扫描版 PDF 进行 OCR 识别。
 
-## Features
+## 功能特性
 
-- **Single-file workflow** — open the whole book once; locate, recognize and write without re-cropping or re-selecting the file
-- **Built-in PDF preview** (PySide6 / QtPdf) — thumbnail navigation + page view; mark the TOC page range visually
-- **Auto-detect TOC pages** and **auto page-offset** ("set current page as body page 1")
-- Auto-load existing PDF bookmarks into the editor
-- TOC editor with level-aware highlighting, monospace font and **real-time validation** (out-of-range / unparsable lines are flagged)
-- Auto-format the TOC by hierarchy level; import / export TOC as text
-- OCR via PaddleOCR API — only the selected TOC pages are sent
-- Light / dark theme, remembers window size
-- Write the edited TOC as bookmarks into a `*_toc.pdf` copy
+- **单文件工作流** —— 一次打开整本书，定位、识别、写入全程无需重新裁剪或重新选择文件
+- **内置 PDF 预览**（PySide6 / QtPdf）—— 可视化标记目录页范围
+- **自动检测目录页** 与 **自动页码偏移**（"将当前页设为正文第 1 页"）
+- 按层级自动格式化目录；支持以OCR识别方式或直接以文本形式写入目录，编辑好的目录写入 `*_toc.pdf` 副本
 
-## Quick Start
+## 快速开始
+### 从源码运行
 
-### Download Executable (Windows)
-
-Download the latest release from [GitHub Releases](https://github.com/zhufeng2/pdftocwriter/releases):
-- `PDFTOCWriter.exe` — Standalone executable, no Python installation required
-
-### From Source
-
-**Requirements:** Python 3.10–3.14
+**环境要求：** Python 3.10–3.14
 
 ```bash
 git clone https://github.com/zhufeng2/pdftocwriter.git
@@ -34,76 +23,31 @@ pip install -r requirements.txt
 python main.py
 ```
 
-## Usage
+## 使用说明
 
-1. Click **打开 PDF** (Open PDF) — or drag a PDF onto the window. Open the **whole book**; existing bookmarks load automatically.
-2. In the center preview, page through to find the contents pages. Click **自动检测目录页** (auto-detect), or use **当前页 → 起始 / 结束** to mark the range from the page you are viewing.
-3. Enter your API token and click **识别选定页** (Recognize) — only the selected TOC pages are sent to OCR.
-4. Edit the TOC on the right (use **自动格式化** to indent by level). Lines with bad page numbers are highlighted in red.
-5. Turn to the book's first body page and click **用当前页为正文首页** to compute the page offset automatically.
-6. Click **写入书签到 PDF** (Write) — a `*_toc.pdf` copy is created next to the original, no second file picker.
+1. 点击 **打开 PDF**，或将 PDF 拖入窗口。打开**整本书**，已有书签会自动加载。
+2. 在中间的预览区翻页找到目录页。点击 **自动检测目录页**，或使用 **当前页 → 起始 / 结束** 从当前浏览的页面标记范围。
+3. 输入你的 API 令牌并点击 **识别选定页** —— 仅所选的目录页会被发送进行 OCR。
+4. 在右侧编辑目录（使用 **自动格式化** 按层级缩进）。页码错误的行会以红色高亮。
+5. 翻到书的正文第一页，点击 **用当前页为正文首页**，自动计算页码偏移。
+6. 点击 **写入书签到 PDF** —— 会在原文件旁创建一个 `*_toc.pdf` 副本。
 
-## TOC Format
+## API 令牌
 
-Each line follows `Title PageNumber`. Six-space indentation marks a sub-level:
+### 获取 PaddleOCR API 令牌
 
-```
-Chapter 1 Introduction 1
-      1.1 Background 1
-      1.2 Purpose 2
-            1.2.1 Scope 3
-Chapter 2 Related Work 5
-```
+OCR 功能需要 PaddleOCR API 令牌。按以下步骤获取：
 
-Auto Format detects the heading prefix (`1.1.1`, `Chapter`, `Section`, etc.) and applies indentation automatically.
+1. 访问 [PaddleOCR AI Studio](https://aistudio.baidu.com/paddleocr)
+2. 使用百度账号注册或登录
+3. 进入 API 部分，创建一个新的 API 密钥
+4. 复制你的 API 令牌
 
-## Screenshots
-![English Interface](img/en.png)
+### 使用令牌
 
-## Building from Source
+- 在应用的 **API Token** 输入框中填入你的令牌
+- 令牌保存在本地的 `~/.pdftocwriter.json`
 
-### Prerequisites
+## 软件截图
+![界面截图](img/en.png)
 
-```bash
-pip install pyinstaller -r requirements.txt
-```
-
-### Build Executable
-
-```bash
-pyinstaller PDFTOCWriter.spec
-```
-
-Output: `dist/PDFTOCWriter/PDFTOCWriter.exe`
-
-For a single-file executable, modify `PDFTOCWriter.spec` and set `onefile=True` in the EXE section.
-
-## API Token
-
-### Getting Your PaddleOCR API Token
-
-The OCR feature requires a PaddleOCR API token. Follow these steps to get one:
-
-1. Visit [PaddleOCR AI Studio](https://aistudio.baidu.com/paddleocr)
-2. Sign up or log in with your Baidu account
-3. Navigate to the API section and create a new API key
-4. Copy your API token
-
-### Using the Token
-
-- Enter your token in the app's **API Token** field
-- The token is stored locally in `~/.pdftocwriter.json` (outside the project directory, not tracked by git)
-- Your token is never uploaded or shared
-
-## Changelog
-
-### v1.0.0 (2026-05-01)
-- Initial release
-- PDF bookmark extraction and editing
-- OCR support for scanned PDFs
-- Auto-formatting for table of contents
-- Windows executable available
-
-## License
-
-MIT
